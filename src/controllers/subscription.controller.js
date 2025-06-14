@@ -3,9 +3,9 @@ import {User} from "../models/user.model.js"
 import {Video} from "../models/video.model.js"
 import { asyncHandler } from "../utils/ayncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
-import { Subscribtion } from "../models/subscribtion.model.js";
+
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { Subscription } from "../models/subscribtion.model.js";
+import { Subscription } from "../models/subscription.model.js";
 
 const toggleSubscription=asyncHandler(async(req,res)=>{
     const {channelId}=req.params
@@ -81,9 +81,46 @@ const getUserChannelSubscribers=asyncHandler(async(req,res)=>{
 
 })
 
+const getSubscribedChannels=asyncHandler(async(req,res)=>{
+    const {subscriberId}=req.params
+
+    if(!mongoose.Types.ObjectId.isValid(subscriberId)){
+        throw new ApiError(400,"invalid subscriber id")
+    }
+
+    const subscribedTo=await Subscription.aggregate([
+        {
+            $match:{
+                subscriber:new mongoose.Types.ObjectId(subscriberId)
+            }
+        },
+        {
+            $lookup:{
+                from:"users",
+                localField:"channel",
+                foreignField:"_id",
+                as:"subscribedToinfo",
+            },
+        },
+        {
+            $unwind:"$subscribedToinfo"
+        },
+        {
+            $project:{
+                id:0,
+                channelId:"subscribedToinfo._id",
+                username:"subscribedToinfo.username",
+                fullname:"subscribedToinfo.fullname",
+                avatar:"subscribedToinfo.avatar"
+
+            }
+        }
+    ])
+})
 
 
 export {
     toggleSubscription,
-    getUserChannelSubscribers
+    getUserChannelSubscribers,
+    getSubscribedChannels
 }
