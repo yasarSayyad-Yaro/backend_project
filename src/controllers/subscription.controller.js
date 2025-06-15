@@ -107,7 +107,7 @@ const getSubscribedChannels=asyncHandler(async(req,res)=>{
         },
         {
             $project:{
-                id:0,
+                _id:0,
                 channelId:"subscribedToinfo._id",
                 username:"subscribedToinfo.username",
                 fullname:"subscribedToinfo.fullname",
@@ -116,6 +116,12 @@ const getSubscribedChannels=asyncHandler(async(req,res)=>{
             }
         }
     ])
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200,subscribedTo,"Subscribed channels fetched successfully"))
+
+
 })
 
 
