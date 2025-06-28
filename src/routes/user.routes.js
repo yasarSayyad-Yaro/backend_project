@@ -42,7 +42,7 @@ router.route("/current-user").get(verifyJWT,getCurrectUser)
 
 router.route("/updateAccount").patch(verifyJWT,updateAccountDetails)
 
-router.route("/avatar").patch(verifyJWT,upload.single("avatat"),updateAvaterImage)
+router.route("/avatar").patch(verifyJWT,upload.single("avatar"),updateAvaterImage)
 
 router.route("/cover-image").patch(verifyJWT,upload.single("coverImage"),updateCoverImage)
 
