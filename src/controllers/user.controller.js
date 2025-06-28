@@ -7,7 +7,10 @@ import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import cookieParser from "cookie-parser"
 import jwt from "jsonwebtoken"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6ffefdb2c76a6f701f917c8bac24deed1880c791
 const generateAccessAndRefreshTokens = async(userId)=>{
 try {
     const user=await User.findById(userId)
